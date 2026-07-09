@@ -1,0 +1,31 @@
+# @package _global_
+
+defaults:
+  - override /model: ego_gmm
+
+model:
+  model_config:
+    n_vis_batch: 0
+    n_vis_scenario: 0
+    n_vis_rollout: 0
+    n_batch_wosac_metric: 100
+    val_open_loop: false
+    val_closed_loop: true
+    validation_rollout_sampling:
+      criterium: topk_prob # {topk_prob, topk_prob_sampled_with_dist}
+      num_k: 3 # for k most likely
+      temp_mode: 1e-3
+      temp_cov: 1e-3
+
+ckpt_path: YOUR_MODEL.ckpt
+
+trainer:
+  limit_train_batches: 1.0
+  limit_val_batches: 60
+  check_val_every_n_epoch: 1
+
+data:
+  train_batch_size: 16
+  val_batch_size: 16
+  test_batch_size: 16
+  num_workers: 8

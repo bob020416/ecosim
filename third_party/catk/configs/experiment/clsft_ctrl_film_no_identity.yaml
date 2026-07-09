@@ -1,0 +1,11 @@
+# @package _global_
+
+defaults:
+  - clsft_ctrl
+
+model:
+  model_config:
+    control:
+      fusion_strategy: film
+      film_init_mode: random
+      film_identity_noise_std: 0.0

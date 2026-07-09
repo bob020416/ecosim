@@ -1,0 +1,27 @@
+backend: catk
+mode: text
+control_type: custom
+
+paths:
+  catk_data_dir: data/catk/validation
+  tfrecord_dir: data/catk/validation_tfrecords_splitted
+  ctrl_ckpt_path: checkpoints/catk/text_control.ckpt
+  output_dir: outputs/catk_text_custom
+
+runtime:
+  device: cuda
+  seed: 42
+  only_controlnet: true
+  max_scenarios: 5
+  save_wosac: true
+  save_vis: true
+  debug_print_prompts: true
+
+control:
+  cfg_guidance_mode: manual
+  cfg_guidance_scale: 1.0
+  control_mask_mode: sketch
+
+text:
+  custom_text: "<ego> is decelerating and coming to a stop."
+  custom_text_delim: "||"

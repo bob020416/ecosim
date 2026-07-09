@@ -1,0 +1,34 @@
+backend: vbd
+mode: text
+control_type: gt
+
+paths:
+  test_path: data/vbd/validation_pkl
+  model_path: checkpoints/vbd/base.ckpt
+  ctrl_ckpt_path: checkpoints/vbd/text_control.ckpt
+  output_dir: outputs/vbd_text_gt
+  text_prompt_root: data/vbd/prosim_instruct_520k
+  text_mapping_path: data/vbd/validation_scenario_to_prosim_scene_strict.json
+
+runtime:
+  device: cuda
+  seed: 42
+  use_training_format: true
+  closedloop: true
+  only_controlnet: true
+  max_scenarios: 10
+  horizon_steps: 11
+  total_steps: 80
+  num_candidates: 8
+  batch_size: 1
+  num_samples: 32
+
+text:
+  text_prompt_subdir: 70b_0.8_0.9_action_prompt_v2
+  text_split: val
+  text_mode: full
+  tag_prompt_subdir: auto
+  tag_sentence_style: ordered
+  tag_time_scale: 0.1
+  allow_missing_text: false
+  print_text_samples: 3

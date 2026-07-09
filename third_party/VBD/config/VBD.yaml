@@ -1,0 +1,165 @@
+model_name: VBD
+
+# Data Config
+train_data_path: ./data/waymovalid-scenarionet_text/training/vbd
+val_data_path: ./data/waymovalid-scenarionet_text/testing/vbd
+
+anchor_path: ./vbd/data/cluster_64_center_dict.pkl
+log_dir: ./train_log
+
+# Latent Conditioning Paths (optional, only used when conditioning_mode='latent')
+# Should contain per-scenario latent pkls loaded by WaymaxDataset (see vbd/data/dataset.py).
+latent_train_dir: ./data/waymovalid-scenarionet/training/latents_behaviorvae_wcontext
+latent_val_dir: ./data/waymovalid-scenarionet/testing/latents_behaviorvae_wcontext
+# Text prompt data (only used when conditioning_mode='text')
+text_prompt_root: ./data/prosim_instruct_520k
+text_mapping_path: ./data/validation_scenario_to_prosim_scene_strict.json
+text_prompt_subdir: 70b_0.8_0.9_action_prompt_v2
+text_split: val
+text_mode: full
+tag_prompt_root: ./data/prosim_instruct_520k
+tag_prompt_subdir: auto
+tag_sentence_style: ordered
+tag_time_scale: 0.1
+attach_text_prompts: true
+text_filter_mapping: true
+text_filter_prompts: true
+text_filter_debug: true
+
+
+# Wandb Config
+use_wandb: False
+username: null
+project: null
+
+# Checkpoint Config
+# IMPORTANT: For ControlNet training, must point to pretrained VBD checkpoint!
+init_from: null  # Set to a pretrained VBD checkpoint path, e.g., ./train_log/VBD/epoch=XX.ckpt
+
+# Model Config
+agents_len: 32
+# Use 80 for open-loop training; 41 is used for closed-loop control training.
+future_len: 41
+action_len: 2
+encoder_layers: 6
+prediction_type: sample
+encoder_version: v1 # v1: GRU, v2: MLP
+
+# Diffusion Params
+diffusion_steps: 5
+schedule_type: cosine
+schedule_s: 0
+schedule_e: 1
+schedule_tau: 1
+
+action_mean: [0.0, 0.0]
+action_std: [1.0, 0.5]
+clamp_value: 5.0
+dt: 0.1
+
+# Training Params
+seed: 42
+batch_size: 1  # Adjust based on GPU memory (16 may cause OOM)
+num_workers: 16
+lr: 0.00005 # Reduced LR for full-model fine-tuning
+weight_decay: 0.01
+epochs: 200
+lr_warmup_step: 5  # Reduced from 50 for small dataset (10 samples = 5 steps/epoch)
+lr_step_freq: 15000 #1000
+lr_step_gamma: 0.8 #0.98
+# When freeze_original: true (ControlNet-only), use a conservative LR to avoid destabilizing FiLM/conditioning.
+controlnet_lr: 0.0001
+log_every_n_steps: 1000  # Log every step for small dataset (default 100)
+
+train_encoder: False # Freeze Encoder
+train_agent_encoder_only: False # If True and train_encoder is False, train only agent_encoder while freezing rest of encoder
+train_denoiser: True # Unfreeze, true is needed for ControlNet fine-tuning 
+train_predictor: False # Unfreeze
+
+# ControlNet Fine-tuning Options
+# ControlNet conditioning feature dim (FiLM conditioning_dim). 64 is usually enough and more stable than 256.
+future_feature_dim: 256
+# Drop a fraction of agents' conditioning during training (improves robustness/transfer).
+per_agent_dropout_min: 0.0
+per_agent_dropout_max: 0.5
+controlnet_future_dropout: 0.0
+controlnet_film_dropout: 0.0
+
+# FiLM conditioning blocks (no scaling - direct gamma/beta output)
+film_blocks: [0, 1]  # Which denoiser transformer blocks to apply FiLM conditioning to
+
+control_metric_interval: 500  # log train guided/unguided ade and fde
+
+# Temporal Encoder Parameters (for FutureEncoder)
+temporal_n_layers: 2   # Number of transformer layers
+temporal_n_heads: 4    # Number of attention heads
+temporal_d_ff: 256     # Feed-forward dimension
+
+# Conditioning Mode Selection
+conditioning_mode: text  # 'future (sketch)', 'latent', or 'text'
+# - 'future': Use FutureEncoder with agents_future trajectories (original sketch/trajectory conditioning)
+# - 'latent': Use LatentEncoder to project per-agent latents into FiLM conditioning features
+future_conditioning_mode: rolling  # 'rolling' (default CL behavior) or 'static_full'
+
+# LatentEncoder (conditioning_mode='latent')
+# agent_latents: [B, A, control_agent_latent_dim]  (required)
+# scenario_latents: optional context latent; keep disabled (0) for behavior-transfer-friendly setup.
+control_agent_latent_dim: 512
+control_scenario_latent_dim: 0 # 0 disables scenario-level latent conditioning.
+control_latent_hidden_dim: 256
+control_latent_n_layers: 3
+control_latent_cross_agent_heads: 4
+latent_use_cross_agent_attn: true
+# Text conditioning (conditioning_mode='text')
+text_max_length: 128
+text_freeze_backbone: true
+text_use_mean_pool: true
+text_encoder_dropout: 0.0
+text_lora_rank: 16 # Enable LoRA.
+text_lora_alpha: 0.4
+text_lora_dropout: 0.0
+text_lora_layers: 4
+text_lora_target_modules: ["q_lin","k_lin","v_lin","out_lin"]
+text_model_path: distilbert-base-uncased
+# Optional time-aware embedding for static conditioning (e.g., text)
+# When enabled in closed-loop, uses the replan index (window count) as the sinusoidal position.
+controlnet_condition_time_embed: true
+# Used by text static conditioning and optional future static_full conditioning.
+controlnet_time_embed_max_len: 100
+# Segment length (timesteps) for agent_latents_segments selection in closed-loop.
+# For 4s windows at dt=0.1 → 40.
+# NOTE: this is the stride unit only when latent_index_mode: time (legacy).
+# In the recommended latent_index_mode: window, segments are indexed by planning step (0,1,2,...) regardless of time.
+latent_segment_len: 40
+# How to index agent_latents_segments during closed-loop:
+# - window: use the planning window index k (0,1,2,...) aligned with execution_horizon shifts (recommended)
+# - time: seg_idx = current_time // latent_segment_len (legacy)
+latent_index_mode: window
+
+# ControlNet Flags (For pure VBD fine-tuning)
+use_controlnet: True
+freeze_original: True
+
+# Closed-Loop Training Parameters (Receding Horizon)
+use_closed_loop_training: True  # Set to True to enable closed-loop training
+closed_loop_execution_horizon: 11 # Steps to execute before re-planning (1.1s)
+closed_loop_prediction_horizon: 40 # Steps to predict in each plan (4.0s) - Aligned with action_len=2
+closed_loop_num_candidates: 8    # M: Number of candidates to generate per planning step
+closed_loop_noise_scale: 1.0     # γ: Noise scale (0-1, controls max diffusion timestep)
+
+# Collision Loss (overlap depth, only when collision happens)
+# Disabled by default.
+collision_loss_weight: 0.0
+
+
+# # Data Efficiency Evaluation
+# # ==================================
+# train_file_list: ./data/subsets/train_300_seed42.txt
+# val_file_list: ./data/subsets/val_200_seed42.txt
+# max_steps: 20000
+
+# # python script/finetune.py \
+# #   -cfg config/VBD.yaml \
+# #   -name cl_latent_eff_300 \
+# #   -ckpt ./ckpt/vbd_cl_0.73.ckpt 
+# # ==================================

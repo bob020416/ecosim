@@ -1,0 +1,28 @@
+backend: catk
+mode: sketch
+control_type: custom
+
+paths:
+  catk_data_dir: data/catk/validation
+  tfrecord_dir: data/catk/validation_tfrecords_splitted
+  ctrl_ckpt_path: checkpoints/catk/sketch_control.ckpt
+  output_dir: outputs/catk_sketch_custom
+  custom_sketch_file: examples/custom_sketch/example.json
+
+runtime:
+  device: cuda
+  seed: 42
+  only_controlnet: true
+  max_scenarios: 5
+  save_wosac: true
+  save_vis: true
+
+control:
+  cfg_guidance_mode: manual
+  cfg_guidance_scale: 0.5
+  sketch: custom
+  target_agents: "0"
+  custom_sketch_save_inputs: true
+  custom_sketch_view_range: 60.0
+  custom_sketch_min_points: 3
+  control_mask_mode: sketch

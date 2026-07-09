@@ -1,0 +1,23 @@
+backend: vbd
+mode: latent
+control_type: gt
+
+paths:
+  test_path: data/vbd/validation_pkl
+  latent_path: data/vbd/latents_behaviorvae
+  model_path: checkpoints/vbd/base.ckpt
+  ctrl_ckpt_path: checkpoints/vbd/latent_control.ckpt
+  output_dir: outputs/vbd_latent_gt
+
+runtime:
+  device: cuda
+  seed: 42
+  use_training_format: true
+  closedloop: true
+  only_controlnet: true
+  max_scenarios: 10
+  horizon_steps: 11
+  total_steps: 80
+  num_candidates: 8
+  batch_size: 2
+  num_samples: 32

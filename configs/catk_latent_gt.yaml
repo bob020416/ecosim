@@ -1,0 +1,26 @@
+backend: catk
+mode: latent
+control_type: gt
+
+paths:
+  catk_data_dir: data/catk/validation
+  tfrecord_dir: data/catk/validation_tfrecords_splitted
+  ctrl_ckpt_path: checkpoints/catk/latent_control.ckpt
+  output_dir: outputs/catk_latent_gt
+  latent_dir: data/catk/latents_catk_4s_wcontext
+  scenario_id_dir: data/catk/scenario_lists/wosac_1000
+
+runtime:
+  device: cuda
+  seed: 42
+  only_controlnet: true
+  max_scenarios: 10
+  save_wosac: true
+  save_vis: false
+  wosac_num_rollouts: 32
+
+control:
+  cfg_guidance_mode: manual
+  cfg_guidance_scale: 0.7
+  latent_target_agents: ""
+  control_mask_mode: train_mask

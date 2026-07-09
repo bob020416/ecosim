@@ -1,0 +1,11 @@
+defaults:
+  - smart
+
+model_config:
+  decoder:
+    num_heads: 4
+    head_dim: 8
+    num_map_layers: 2
+    num_agent_layers: 4
+
+# 3M parameters.

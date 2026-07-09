@@ -1,0 +1,33 @@
+backend: catk
+mode: text
+control_type: gt
+
+paths:
+  catk_data_dir: data/catk/validation
+  tfrecord_dir: data/catk/validation_tfrecords_splitted
+  ctrl_ckpt_path: checkpoints/catk/text_control.ckpt
+  output_dir: outputs/catk_text_gt
+  prosim_instruct_dir: data/catk
+  scenario_id_dir: data/catk/scenario_lists/wosac_1000_text
+
+runtime:
+  device: cuda
+  seed: 42
+  only_controlnet: true
+  max_scenarios: 10
+  save_wosac: true
+  save_vis: false
+  wosac_num_rollouts: 32
+
+text:
+  text_mode: tag_only
+  text_prompt_subdir: 70b_0.8_0.9_action_prompt_v2
+  text_split: val
+  tag_prompt_subdir: auto
+  tag_sentence_style: ordered
+  tag_time_scale: 0.1
+
+control:
+  cfg_guidance_mode: manual
+  cfg_guidance_scale: 1.0
+  control_mask_mode: target_agent_only

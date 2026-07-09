@@ -1,0 +1,30 @@
+backend: vbd
+mode: text
+control_type: custom
+
+paths:
+  test_path: data/vbd/validation_pkl
+  model_path: checkpoints/vbd/base.ckpt
+  ctrl_ckpt_path: checkpoints/vbd/text_control.ckpt
+  output_dir: outputs/vbd_text_custom
+
+runtime:
+  device: cuda
+  seed: 42
+  use_training_format: true
+  closedloop: true
+  only_controlnet: true
+  max_scenarios: 5
+  horizon_steps: 11
+  total_steps: 80
+  num_candidates: 8
+  batch_size: 1
+  num_samples: 32
+
+control:
+  target_agents: "0"
+
+text:
+  custom_text: "<ego> is decelerating and coming to a stop."
+  custom_text_delim: "||"
+  print_text_samples: 3

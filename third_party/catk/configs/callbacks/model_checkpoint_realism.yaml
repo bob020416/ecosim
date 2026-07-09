@@ -1,0 +1,16 @@
+# https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.callbacks.ModelCheckpoint.html
+
+model_checkpoint_realism:
+  _target_: lightning.pytorch.callbacks.ModelCheckpoint
+  dirpath: ${paths.output_dir}/checkpoints
+  filename: "realism_{epoch:03d}"
+  monitor: "val_closed/wosac/realism_meta_metric"
+  mode: "max"
+  save_top_k: 1
+  save_last: null
+  auto_insert_metric_name: false
+  save_weights_only: false
+  every_n_train_steps: null
+  train_time_interval: null
+  every_n_epochs: 1
+  save_on_train_epoch_end: null

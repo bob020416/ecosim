@@ -1,0 +1,29 @@
+backend: vbd
+mode: sketch
+control_type: custom
+
+paths:
+  test_path: data/vbd/validation_pkl
+  model_path: checkpoints/vbd/base.ckpt
+  ctrl_ckpt_path: checkpoints/vbd/sketch_control.ckpt
+  output_dir: outputs/vbd_sketch_custom
+
+runtime:
+  device: cuda
+  seed: 42
+  use_training_format: true
+  closedloop: true
+  only_controlnet: true
+  max_scenarios: 10
+  horizon_steps: 11
+  total_steps: 80
+  num_candidates: 8
+  batch_size: 2
+  num_samples: 32
+
+control:
+  sketch: right_turn
+  target_agents: "0,1"
+  forward_distance: 5.0
+  turn_distance: 5.0
+  turn_angle_deg: 60.0

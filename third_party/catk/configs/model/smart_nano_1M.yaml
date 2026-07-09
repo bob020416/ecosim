@@ -1,0 +1,16 @@
+defaults:
+  - smart
+
+model_config:
+  decoder:
+    hidden_dim: 64
+    num_heads: 4
+    head_dim: 8
+    num_map_layers: 2
+    num_agent_layers: 4
+    pl2pl_radius: 10
+    pl2a_radius: 20
+    a2a_radius: 20
+    time_span: 20
+
+# 1.2M parameters. Train on single A100 80GB, with batch size 64.

@@ -1,0 +1,9 @@
+# @package _global_
+
+defaults:
+  - clsft_ctrl
+
+model:
+  model_config:
+    control:
+      fusion_strategy: additive

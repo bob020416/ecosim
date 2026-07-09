@@ -1,0 +1,80 @@
+model_name: BehaviorVAE_full_80
+
+# =====================
+# Data
+# =====================
+# Replace these with the actual training and validation folders.
+train_data_path: ./data/waymovalid-scenarionet/training/vbd
+val_data_path: ./data/waymovalid-scenarionet/testing/vbd
+anchor_path: ./vbd/data/cluster_64_center_dict.pkl
+
+# =====================
+# Logging / output
+# =====================
+log_dir: ./train_log_behavior_vae_full
+use_wandb: false
+
+# =====================
+# Shapes / preprocessing
+# =====================
+agents_len: 64
+future_len: 81   # states INCLUDING t0
+truncate_after_invalid: true
+
+# =====================
+# Context (map, relations, status)
+# =====================
+encoder_layers: 6
+encoder_version: v1
+train_context_encoder: true
+use_context: true
+posterior_use_context: false
+
+# =====================
+# Latent + interaction
+# =====================
+z_dim: 512
+use_z_scene: false
+z_scene_dim: 0
+hidden_dim: 512
+interaction_layers: 1
+interaction_heads: 8
+
+# =====================
+# VAE
+# =====================
+use_vae: true
+latent_sampling: true
+latent_sampling_warmup_steps: 1000
+val_latent_sampling: false
+use_conditional_prior: true
+kl_weight: 0.001
+kl_warmup_steps: 20000
+free_nats: 0.0
+
+# =====================
+# Decoder / objective
+# =====================
+# Predict agent-local deltas directly: (dx,dy,sin(dtheta),cos(dtheta))
+decoder_mlp_layers: 6
+dropout: 0.0
+
+# =====================
+# Optimization
+# =====================
+seed: 42
+batch_size: 4
+num_workers: 4
+lr: 0.0003
+weight_decay: 0.0
+epochs: 200
+
+# =====================
+# Trainer
+# =====================
+num_nodes: 1
+num_gpus: 1
+precision: 32
+log_every_n_steps: 50
+gradient_clip_val: 1.0
+overfit_batches: 0

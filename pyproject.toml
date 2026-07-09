@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ecosim-traffic"
+version = "0.1.0"
+description = "ECoSim inference wrappers for controllable traffic simulation."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "pyyaml>=6.0",
+]
+
+[project.scripts]
+ecosim-infer = "ecosim.run_inference:main"
+
+[tool.setuptools.packages.find]
+include = ["ecosim*"]

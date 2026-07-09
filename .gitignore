@@ -1,0 +1,49 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Local environments
+.env
+.venv/
+venv/
+env/
+
+# External data and checkpoints at the release repo root
+/data/
+/datasets/
+/checkpoints/
+/outputs/
+/results/
+/debug_compare/
+/testing_results/
+/wandb/
+/logs/
+/run_logs/
+/vis/
+
+# Heavy artifacts inside vendored backbones
+third_party/VBD/ckpt/
+third_party/VBD/train_log*/
+third_party/VBD/testing_results/
+third_party/VBD/logs/
+third_party/VBD/data/waymo*/
+third_party/VBD/data/*scenarionet*/
+third_party/catk/cache/
+third_party/catk/ckpt/
+third_party/catk/logs/
+third_party/catk/run_logs/
+third_party/catk/vis/
+
+# Model weights
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+
+# Visualization outputs
+*.gif
+*.mp4
+*.avi

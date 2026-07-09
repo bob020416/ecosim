@@ -1,0 +1,2 @@
+<ego> is turning right.
+<ego> is decelerating and coming to a stop.
