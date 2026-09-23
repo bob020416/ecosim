@@ -67,3 +67,21 @@ SMART/
   prosim_instruct_520k/
   validation_scenario_to_prosim_scene_strict.json
 ```
+
+## Validation Scenario to ProSim Scene Mapping
+
+The strict validation mapping is included at
+[`assets/mappings/validation_scenario_to_prosim_scene_strict.json`](../assets/mappings/validation_scenario_to_prosim_scene_strict.json).
+It contains 25,835 entries mapping scenario IDs (JSON keys) to ProSim scene IDs
+(JSON string values), for example `"1000a444aa94927d": "scene_24844"`.
+
+To use it with the recommended VBD and CATK data layouts above, copy it into
+both data directories:
+
+```bash
+mkdir -p data/vbd data/catk/SMART
+cp assets/mappings/validation_scenario_to_prosim_scene_strict.json data/vbd/
+cp assets/mappings/validation_scenario_to_prosim_scene_strict.json data/catk/SMART/
+```
+
+The ProSim instruction dataset itself must be supplied separately.
