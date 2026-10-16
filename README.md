@@ -27,7 +27,7 @@ CATK inference is the current supported path:
 - [x] BehaviorVAE training and latent export utilities
 - [x] Config-driven wrapper for VBD and CATK inference
 - [ ] Clean public training pipeline for ECoSim control adapters
-- [ ] Hosted checkpoint and data download links
+- [X] Hosted checkpoint and data download links
 - [ ] Final license and third-party redistribution review
 
 The missing training item above refers to the public, end-to-end adapter
@@ -49,6 +49,9 @@ For VBD or BehaviorVAE utilities, use the VBD-compatible environment.
 
 The configs use repository-relative paths by default. You can also replace any
 path with an absolute path.
+
+Initial Released of each modality's checkpoing can be download here:
+https://drive.google.com/drive/folders/12EPwbLdtYCR_zafChCksOJ0qxbZTXkz4?usp=sharing
 
 ```text
 ecosim/
