@@ -50,7 +50,7 @@ For VBD or BehaviorVAE utilities, use the VBD-compatible environment.
 The configs use repository-relative paths by default. You can also replace any
 path with an absolute path.
 
-Initial Released of each modality's checkpoing can be download here:
+Initial Released of each modality's checkpoint for catk can be download here:
 https://drive.google.com/drive/folders/12EPwbLdtYCR_zafChCksOJ0qxbZTXkz4?usp=sharing
 
 ```text
